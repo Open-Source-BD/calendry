@@ -1,0 +1,46 @@
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { sql } from "drizzle-orm";
+
+export const users = sqliteTable("users", {
+  id: text("id").primaryKey(), // Clerk ID
+  username: text("username").unique(),
+  email: text("email").notNull().unique(),
+  name: text("name"),
+  imageUrl: text("image_url"),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+});
+
+export const eventTypes = sqliteTable("event_types", {
+  id: text("id").primaryKey(), // UUID or nanoid
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  description: text("description"),
+  duration: integer("duration").notNull(), // in minutes
+  isActive: integer("is_active", { mode: "boolean" }).default(true).notNull(),
+  slug: text("slug").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+});
+
+export const availability = sqliteTable("availability", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  day: text("day").notNull(), // "monday", "tuesday", etc.
+  startTime: text("start_time").notNull(), // e.g., "09:00"
+  endTime: text("end_time").notNull(), // e.g., "17:00"
+  isActive: integer("is_active", { mode: "boolean" }).default(true).notNull(),
+});
+
+export const bookings = sqliteTable("bookings", {
+  id: text("id").primaryKey(),
+  eventTypeId: text("event_type_id").notNull().references(() => eventTypes.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }), // The host
+  guestName: text("guest_name").notNull(),
+  guestEmail: text("guest_email").notNull(),
+  guestNotes: text("guest_notes"),
+  startTime: integer("start_time", { mode: "timestamp" }).notNull(),
+  endTime: integer("end_time", { mode: "timestamp" }).notNull(),
+  googleEventId: text("google_event_id"),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+});
