@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Clock, Video, Users } from "lucide-react";
 import Link from "next/link";
-import { format } from "date-fns";
 import { CopyLinkButton } from "@/components/copy-link-button";
+import { BookingsList } from "./bookings-list";
 
 export const dynamic = "force-dynamic";
 
@@ -109,7 +109,7 @@ export default async function DashboardPage() {
           )}
         </section>
 
-        {/* Bookings / Collections Section */}
+        {/* Bookings Section with Pagination and Modal Details */}
         <section>
           <div className="flex items-center gap-2 mb-6">
             <Users className="h-5 w-5 text-primary" />
@@ -121,74 +121,10 @@ export default async function DashboardPage() {
               <p className="text-muted-foreground">No bookings found yet. Your scheduled meetings will appear here.</p>
             </Card>
           ) : (
-            <div className="space-y-6">
-              {userEventTypes.map((event) => {
-                const eventBookings = allBookings.filter(b => b.eventTypeId === event.id);
-                if (eventBookings.length === 0) return null;
-
-                return (
-                  <div key={event.id} className="space-y-3">
-                    <h3 className="font-medium text-sm text-muted-foreground uppercase tracking-wider px-1">
-                      {event.name} ({eventBookings.length})
-                    </h3>
-                    <div className="grid grid-cols-1 gap-3">
-                      {eventBookings.map((booking) => (
-                        <Card key={booking.id} className="shadow-sm hover:shadow-md transition-shadow">
-                          <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                            <div className="flex items-center gap-4">
-                              <div className="bg-primary/10 h-10 w-10 rounded-full flex items-center justify-center text-primary font-bold">
-                                {booking.guestName.charAt(0).toUpperCase()}
-                              </div>
-                              <div>
-                                <div className="font-semibold text-gray-900">{booking.guestName}</div>
-                                <div className="text-sm text-muted-foreground">{booking.guestEmail}</div>
-                              </div>
-                            </div>
-                            <div className="text-right sm:text-left flex flex-col sm:items-end">
-                              <div className="text-sm font-medium">
-                                {format(new Date(booking.startTime), "EEEE, MMM do")}
-                              </div>
-                              <div className="text-xs text-muted-foreground">
-                                {format(new Date(booking.startTime), "h:mm a")} - {format(new Date(booking.endTime), "h:mm a")}
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-              
-              {/* Handle bookings for deleted event types if any */}
-              {allBookings.some(b => !userEventTypes.find(et => et.id === b.eventTypeId)) && (
-                <div className="space-y-3">
-                  <h3 className="font-medium text-sm text-muted-foreground uppercase tracking-wider px-1">
-                    Other / Archived Events
-                  </h3>
-                  {allBookings.filter(b => !userEventTypes.find(et => et.id === b.eventTypeId)).map((booking) => (
-                    <Card key={booking.id} className="shadow-sm opacity-75">
-                      <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div className="flex items-center gap-4">
-                          <div className="bg-gray-100 h-10 w-10 rounded-full flex items-center justify-center text-gray-500 font-bold">
-                            {booking.guestName.charAt(0).toUpperCase()}
-                          </div>
-                          <div>
-                            <div className="font-semibold text-gray-900">{booking.guestName}</div>
-                            <div className="text-sm text-muted-foreground">{booking.guestEmail}</div>
-                          </div>
-                        </div>
-                        <div className="text-right flex flex-col items-end">
-                          <div className="text-sm font-medium">
-                            {format(new Date(booking.startTime), "MMM do, yyyy")}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </div>
+            <BookingsList 
+              initialBookings={allBookings} 
+              eventTypes={userEventTypes.map(e => ({ id: e.id, name: e.name }))} 
+            />
           )}
         </section>
       </div>
