@@ -1,45 +1,117 @@
+"use client";
+
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
-import { Calendar as CalendarIcon, LayoutDashboard, Clock } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import { Calendar as CalendarIcon, Search, HelpCircle, Settings, Grid, SlidersHorizontal, CheckCircle2, X } from "lucide-react";
+import { toast } from "sonner";
 
 export function Navbar() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (searchQuery) {
+        params.set("q", searchQuery);
+      } else {
+        params.delete("q");
+      }
+      router.push(`/dashboard?${params.toString()}`);
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery, router, searchParams]);
+
+  const handleUtilityClick = (name: string) => {
+    toast.info(`${name} feature coming soon!`);
+  };
+
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-8">
-          <Link href="/dashboard" className="flex items-center gap-2 group">
-            <div className="bg-primary p-1.5 rounded-lg text-white group-hover:rotate-6 transition-transform">
-              <CalendarIcon size={20} />
+    <nav className="sticky top-0 z-50 w-full bg-[#f8f9fa]">
+      <div className="px-4 h-16 flex items-center justify-between">
+        {/* Left side: Logo and App Name */}
+        <div className="flex items-center gap-2 min-w-[232px]">
+          <Link href="/dashboard" className="flex items-center gap-3 group p-2 hover:bg-gray-100 rounded-lg transition-colors">
+            <div className="bg-[#1a73e8] p-1.5 rounded-lg text-white">
+              <CalendarIcon size={24} />
             </div>
-            <span className="text-xl font-medium tracking-tight text-gray-900">
+            <span className="text-[22px] font-normal text-[#5f6368]">
               Calendra
             </span>
           </Link>
-          
-          <div className="hidden md:flex items-center gap-1">
-            <Link 
-              href="/dashboard" 
-              className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
-            >
-              <LayoutDashboard size={16} />
-              Dashboard
-            </Link>
-            <Link 
-              href="/dashboard/availability" 
-              className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
-            >
-              <Clock size={16} />
-              Availability
-            </Link>
+        </div>
+
+        {/* Middle: Search Bar (Google Style) */}
+        <div className="hidden md:flex flex-1 max-w-[720px]">
+          <div className="relative w-full group">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <Search className="h-5 w-5 text-[#5f6368]" />
+            </div>
+            <input
+              type="text"
+              placeholder="Search in Calendra"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="block w-full pl-12 pr-12 py-3 bg-[#eaf1fb] border-transparent rounded-full focus:bg-white focus:shadow-md transition-all text-base outline-none"
+            />
+            <div className="absolute inset-y-0 right-0 pr-4 flex items-center gap-1">
+              {searchQuery && (
+                <button 
+                  onClick={() => setSearchQuery("")}
+                  className="p-1.5 hover:bg-gray-200 rounded-full text-[#5f6368]"
+                >
+                  <X size={20} />
+                </button>
+              )}
+              <button 
+                onClick={() => handleUtilityClick("Search filters")}
+                className="p-1.5 hover:bg-gray-200 rounded-full text-[#5f6368]"
+              >
+                <SlidersHorizontal size={20} />
+              </button>
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="bg-gray-100 p-1 rounded-full border border-gray-200">
+        {/* Right side: Utilities and Profile */}
+        <div className="flex items-center gap-1 md:gap-2">
+          <button 
+            onClick={() => handleUtilityClick("Task list")}
+            className="p-2.5 hover:bg-gray-100 rounded-full text-[#5f6368] hidden sm:block"
+          >
+            <CheckCircle2 size={24} />
+          </button>
+          <button 
+            onClick={() => handleUtilityClick("Support")}
+            className="p-2.5 hover:bg-gray-100 rounded-full text-[#5f6368] hidden sm:block"
+          >
+            <HelpCircle size={24} />
+          </button>
+          <button 
+            onClick={() => handleUtilityClick("Settings")}
+            className="p-2.5 hover:bg-gray-100 rounded-full text-[#5f6368] hidden sm:block"
+          >
+            <Settings size={24} />
+          </button>
+          <a 
+            href="https://about.google/products/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2.5 hover:bg-gray-100 rounded-full text-[#5f6368] hidden sm:block"
+            title="Google Apps"
+          >
+            <Grid size={24} />
+          </a>
+          
+          <div className="ml-2">
             <UserButton 
               appearance={{
                 elements: {
-                  avatarBox: "h-8 w-8"
+                  avatarBox: "h-9 w-9 border border-gray-200"
                 }
               }}
             />

@@ -14,7 +14,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { createEventType } from "@/actions/event-types";
@@ -57,79 +56,81 @@ export default function NewEventPage() {
   }
 
   return (
-    <div className="container mx-auto py-10 px-4 max-w-2xl">
-      <Card>
-        <CardHeader>
-          <CardTitle>Create New Event Type</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Event Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="30 Minute Meeting" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="slug"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Slug</FormLabel>
-                    <FormControl>
-                      <Input placeholder="30-min" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      This will be used in your booking URL: calendra.com/username/slug
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="duration"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Duration (minutes)</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Brief description of the meeting" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex gap-4">
-                <Button type="button" variant="outline" onClick={() => router.back()}>
-                  Cancel
-                </Button>
-                <Button type="submit">Create Event Type</Button>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+    <div className="p-4 md:p-8 max-w-2xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-2xl font-normal text-[#1f1f1f]">Create New Event Type</h1>
+        <p className="text-sm text-[#5f6368]">Configure a new type of meeting for your guests.</p>
+      </div>
+
+      <div className="google-card p-6">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[#1f1f1f]">Event Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="30 Minute Meeting" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="slug"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[#1f1f1f]">URL Slug</FormLabel>
+                  <FormControl>
+                    <Input placeholder="30-min" {...field} />
+                  </FormControl>
+                  <FormDescription className="text-xs text-[#5f6368]">
+                    This will be used in your booking URL: calendra.com/username/slug
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="duration"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[#1f1f1f]">Duration (minutes)</FormLabel>
+                  <FormControl>
+                    <Input type="number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[#1f1f1f]">Description</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Brief description of the meeting" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex gap-3 pt-4 border-t border-gray-100">
+              <Button type="button" variant="outline" className="rounded-full" onClick={() => router.back()}>
+                Cancel
+              </Button>
+              <Button type="submit" className="rounded-full bg-[#1a73e8] hover:bg-[#1557b0]">
+                Create Event Type
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 }

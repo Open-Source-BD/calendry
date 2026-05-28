@@ -15,7 +15,12 @@ export function CopyLinkButton({ url }: { url: string }) {
   };
 
   return (
-    <Button variant="secondary" size="sm" className="w-full" onClick={handleCopy}>
+    <Button 
+      variant="secondary" 
+      size="sm" 
+      className="flex-1 rounded-full bg-[#f1f3f4] text-[#3c4043] hover:bg-[#e8eaed] font-medium border-none shadow-none" 
+      onClick={handleCopy}
+    >
       <Copy className="mr-2 h-4 w-4" /> Copy Link
     </Button>
   );

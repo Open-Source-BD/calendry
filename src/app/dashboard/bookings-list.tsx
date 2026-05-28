@@ -2,17 +2,15 @@
 
 import { useState } from "react";
 import { format } from "date-fns";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ChevronLeft, ChevronRight, Mail, Calendar, Clock, MessageSquare, User, Video } from "lucide-react";
+import { ChevronLeft, ChevronRight, Calendar, User, Video, MessageSquare } from "lucide-react";
 
 interface Booking {
   id: string;
@@ -51,115 +49,92 @@ export function BookingsList({
       <div className="grid grid-cols-1 gap-4">
         {currentBookings.map((booking) => (
           <Dialog key={booking.id}>
-            <DialogTrigger asChild>
-              <Card className="shadow-sm hover:shadow-md transition-all cursor-pointer border-l-4 border-l-primary group">
-                <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="bg-primary/10 h-10 w-10 rounded-full flex items-center justify-center text-primary font-bold group-hover:bg-primary group-hover:text-white transition-colors">
-                      {booking.guestName.charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                      <div className="font-semibold text-gray-900">{booking.guestName}</div>
-                      <div className="text-sm text-muted-foreground flex items-center gap-1">
-                        <span className="bg-gray-100 px-2 py-0.5 rounded text-[10px] uppercase font-bold text-gray-500">
-                          {getEventName(booking.eventTypeId)}
-                        </span>
-                      </div>
-                    </div>
+            <DialogTrigger 
+              nativeButton={false}
+              render={
+                <div className="google-card p-5 flex items-center justify-between cursor-pointer bg-white border border-gray-100 mb-3" />
+              }
+            >
+              <div className="flex items-center gap-4">
+                <div className="bg-[#e8f1fe] h-12 w-12 rounded-full flex items-center justify-center text-[#1a73e8] font-medium text-lg">
+                  {booking.guestName.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <div className="text-base font-medium text-[#1f1f1f] mb-1">{booking.guestName}</div>
+                  <div className="flex items-center gap-2 text-sm text-[#5f6368]">
+                    <span className="bg-[#f1f3f4] px-2 py-0.5 rounded text-xs font-medium text-[#3c4043]">
+                      {getEventName(booking.eventTypeId)}
+                    </span>
+                    <span className="text-gray-300">•</span>
+                    <span>{booking.guestEmail}</span>
                   </div>
-                  <div className="text-right sm:text-left flex flex-col sm:items-end">
-                    <div className="text-sm font-medium">
-                      {format(new Date(booking.startTime), "MMM do, yyyy")}
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      {format(new Date(booking.startTime), "h:mm a")}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-sm font-medium text-[#1f1f1f]">
+                  {format(new Date(booking.startTime), "MMM do, yyyy")}
+                </div>
+                <div className="text-xs text-[#5f6368]">
+                  {format(new Date(booking.startTime), "h:mm a")}
+                </div>
+              </div>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[500px]">
               <DialogHeader>
-                <DialogTitle className="text-2xl flex items-center gap-2">
-                  <User className="h-5 w-5 text-primary" />
-                  Booking Details
+                <DialogTitle className="text-xl font-normal text-[#1f1f1f]">
+                  Meeting Details
                 </DialogTitle>
-                <DialogDescription>
-                  Full information for the scheduled meeting.
-                </DialogDescription>
               </DialogHeader>
               
               <div className="grid gap-6 py-4">
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="bg-muted p-2 rounded-lg">
-                      <Video className="h-4 w-4" />
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="mt-1 text-[#5f6368]">
+                      <Video size={20} />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Event Type</p>
-                      <p className="text-base font-semibold">{getEventName(booking.eventTypeId)}</p>
+                      <p className="text-sm text-[#5f6368]">Event Type</p>
+                      <p className="text-base font-medium text-[#1f1f1f]">{getEventName(booking.eventTypeId)}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3">
-                    <div className="bg-muted p-2 rounded-lg">
-                      <User className="h-4 w-4" />
+                  <div className="flex items-start gap-4">
+                    <div className="mt-1 text-[#5f6368]">
+                      <User size={20} />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Guest</p>
-                      <p className="text-base font-semibold">{booking.guestName}</p>
+                      <p className="text-sm text-[#5f6368]">Guest</p>
+                      <p className="text-base font-medium text-[#1f1f1f]">{booking.guestName}</p>
+                      <p className="text-sm text-[#5f6368]">{booking.guestEmail}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3">
-                    <div className="bg-muted p-2 rounded-lg">
-                      <Mail className="h-4 w-4" />
+                  <div className="flex items-start gap-4">
+                    <div className="mt-1 text-[#5f6368]">
+                      <Calendar size={20} />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Email</p>
-                      <p className="text-base">{booking.guestEmail}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="bg-muted p-2 rounded-lg">
-                      <Calendar className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">Date</p>
-                      <p className="text-base">{format(new Date(booking.startTime), "EEEE, MMMM do, yyyy")}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="bg-muted p-2 rounded-lg">
-                      <Clock className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">Time</p>
-                      <p className="text-base">
+                      <p className="text-sm text-[#5f6368]">When</p>
+                      <p className="text-base font-medium text-[#1f1f1f]">{format(new Date(booking.startTime), "EEEE, MMMM do, yyyy")}</p>
+                      <p className="text-sm text-[#5f6368]">
                         {format(new Date(booking.startTime), "h:mm a")} - {format(new Date(booking.endTime), "h:mm a")}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3">
-                    <div className="bg-muted p-2 rounded-lg">
-                      <MessageSquare className="h-4 w-4" />
+                  {booking.guestNotes && (
+                    <div className="flex items-start gap-4">
+                      <div className="mt-1 text-[#5f6368]">
+                        <MessageSquare size={20} />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm text-[#5f6368]">Guest Notes</p>
+                        <div className="mt-1 p-3 bg-[#f8f9fa] rounded-xl border border-gray-100 text-sm text-[#3c4043]">
+                          {booking.guestNotes}
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-muted-foreground">Guest Notes</p>
-                      <p className="text-base italic text-gray-600 bg-gray-50 p-3 rounded-md border mt-1">
-                        {booking.guestNotes || "No notes provided by the guest."}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t">
-                  <p className="text-xs text-muted-foreground text-center">
-                    Booking ID: {booking.id}
-                  </p>
+                  )}
                 </div>
               </div>
             </DialogContent>

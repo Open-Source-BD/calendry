@@ -1,7 +1,6 @@
 import { db } from "@/db";
 import { notFound } from "next/navigation";
 import { BookingForm } from "./booking-form";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Clock } from "lucide-react";
 
@@ -31,27 +30,27 @@ export default async function PublicBookingPage({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <Card className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-3">
-        <div className="p-8 border-r bg-white rounded-l-lg">
-          <Avatar className="h-16 w-16 mb-4">
+    <div className="min-h-screen bg-[#f8f9fa] flex items-center justify-center p-4">
+      <div className="google-card max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 overflow-hidden bg-white">
+        <div className="p-8 md:p-10 border-b md:border-b-0 md:border-r border-gray-100">
+          <Avatar className="h-16 w-16 mb-6 border border-gray-100">
             <AvatarImage src={user.imageUrl || ""} />
-            <AvatarFallback>{user.name?.charAt(0)}</AvatarFallback>
+            <AvatarFallback className="bg-[#e8f0fe] text-[#1a73e8]">{user.name?.charAt(0)}</AvatarFallback>
           </Avatar>
-          <h2 className="text-sm font-medium text-muted-foreground mb-1">{user.name}</h2>
-          <h1 className="text-2xl font-bold mb-4">{eventType.name}</h1>
-          <div className="flex items-center text-sm text-muted-foreground mb-4">
-            <Clock className="mr-2 h-4 w-4" />
+          <h2 className="text-sm font-medium text-[#5f6368] mb-1">{user.name}</h2>
+          <h1 className="text-2xl font-normal text-[#1f1f1f] mb-6">{eventType.name}</h1>
+          <div className="flex items-center text-sm text-[#5f6368] mb-6">
+            <Clock className="mr-3 h-5 w-5 text-[#1a73e8]" />
             {eventType.duration} minutes
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-[#5f6368] leading-relaxed">
             {eventType.description || "Welcome to my scheduling page. Please select a time that works for you."}
           </p>
         </div>
-        <div className="md:col-span-2 p-8">
+        <div className="md:col-span-2 p-8 md:p-10">
           <BookingForm eventType={eventType} hostId={user.id} />
         </div>
-      </Card>
+      </div>
     </div>
   );
 }

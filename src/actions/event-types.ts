@@ -29,3 +29,42 @@ export async function createEventType(values: {
 
   revalidatePath("/dashboard");
 }
+
+export async function updateEventType(id: string, values: {
+  name: string;
+  description?: string;
+  duration: number;
+  slug: string;
+  isActive: boolean;
+}) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  await db.update(eventTypes)
+    .set({
+      name: values.name,
+      description: values.description,
+      duration: values.duration,
+      slug: values.slug,
+      isActive: values.isActive,
+    })
+    .where((et, { eq, and }) => and(eq(et.id, id), eq(et.userId, userId)));
+
+  revalidatePath("/dashboard");
+}
+
+export async function deleteEventType(id: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  await db.delete(eventTypes)
+    .where((et, { eq, and }) => and(eq(et.id, id), eq(et.userId, userId)));
+
+  revalidatePath("/dashboard");
+}

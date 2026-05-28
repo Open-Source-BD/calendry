@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { format, isSameDay, startOfDay } from "date-fns";
+import { format, startOfDay } from "date-fns";
 import { getAvailableSlotsAction } from "@/actions/availability-fetch";
 import { createBookingAction } from "@/actions/bookings";
 import { Loader2, ChevronLeft } from "lucide-react";
@@ -22,18 +22,10 @@ export function BookingForm({ eventType, hostId }: { eventType: any; hostId: str
   const [guestEmail, setGuestEmail] = useState("");
   const [guestNotes, setGuestNotes] = useState("");
 
-  useEffect(() => {
-    if (selectedDate) {
-      fetchSlots(selectedDate);
-    }
-  }, [selectedDate]);
-
-  const fetchSlots = async (date: Date) => {
+  const fetchSlots = useCallback(async (date: Date) => {
     setIsLoading(true);
-    console.log("Fetching slots for date:", date);
     try {
       const slots = await getAvailableSlotsAction(hostId, date.toISOString(), eventType.duration);
-      console.log("Slots received:", slots.length);
       setAvailableSlots(slots);
     } catch (error) {
       console.error("Fetch slots error:", error);
@@ -41,7 +33,14 @@ export function BookingForm({ eventType, hostId }: { eventType: any; hostId: str
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [hostId, eventType.duration]);
+
+  useEffect(() => {
+    if (selectedDate) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      fetchSlots(selectedDate);
+    }
+  }, [selectedDate, fetchSlots]);
 
   const handleBooking = async () => {
     if (!selectedSlot) return;
@@ -66,47 +65,52 @@ export function BookingForm({ eventType, hostId }: { eventType: any; hostId: str
 
   if (step === 3) {
     return (
-      <div className="text-center py-10">
-        <h2 className="text-2xl font-bold mb-4">Confirmed!</h2>
-        <p className="text-muted-foreground mb-6">
-          You are scheduled with {eventType.name}. An invitation has been sent to your email.
+      <div className="text-center py-12 flex flex-col items-center justify-center h-full">
+        <div className="h-20 w-20 rounded-full bg-[#e6f4ea] flex items-center justify-center text-[#1e8e3e] mb-6">
+          <svg className="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h2 className="text-2xl font-normal text-[#1f1f1f] mb-4">You&apos;re all set!</h2>
+        <p className="text-[#5f6368] mb-8 max-w-sm">
+          A confirmation for {eventType.name} has been sent to your email address.
         </p>
-        <Button onClick={() => window.location.reload()}>Book another</Button>
+        <Button className="rounded-full px-8" onClick={() => window.location.reload()}>Book another</Button>
       </div>
     );
   }
 
   return (
-    <div>
+    <div className="h-full">
       {step === 1 ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-center lg:text-left">Select a Date</h3>
+            <h3 className="text-lg font-medium text-[#1f1f1f] mb-6 text-center lg:text-left">Select a Date</h3>
             <div className="flex justify-center lg:justify-start">
               <Calendar
                 mode="single"
                 selected={selectedDate}
                 onSelect={setSelectedDate}
-                className="rounded-md border shadow"
+                className="rounded-2xl border border-gray-100 shadow-sm p-4"
                 disabled={(date) => date < startOfDay(new Date())}
               />
             </div>
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-4">
+            <h3 className="text-lg font-medium text-[#1f1f1f] mb-6">
               {selectedDate ? format(selectedDate, "EEEE, MMMM do") : "Select a date"}
             </h3>
             {isLoading ? (
               <div className="flex items-center justify-center h-64">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <Loader2 className="h-8 w-8 animate-spin text-[#1a73e8]" />
               </div>
             ) : availableSlots.length > 0 ? (
-              <div className="grid grid-cols-1 gap-2 max-h-[400px] overflow-y-auto pr-2">
+              <div className="grid grid-cols-1 gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                 {availableSlots.map((slot) => (
                   <Button
                     key={slot}
                     variant={selectedSlot === slot ? "default" : "outline"}
-                    className="w-full"
+                    className="w-full h-12 rounded-lg text-sm font-medium border-gray-200"
                     onClick={() => {
                       setSelectedSlot(slot);
                       setStep(2);
@@ -117,56 +121,60 @@ export function BookingForm({ eventType, hostId }: { eventType: any; hostId: str
                 ))}
               </div>
             ) : (
-              <p className="text-muted-foreground text-center py-10">No available slots for this day.</p>
+              <div className="text-center py-20 bg-[#f8f9fa] rounded-2xl border border-dashed border-gray-200">
+                <p className="text-[#5f6368] text-sm">No available slots for this day.</p>
+              </div>
             )}
           </div>
         </div>
       ) : (
-        <div className="max-w-md mx-auto">
-          <Button variant="ghost" size="sm" className="mb-4" onClick={() => setStep(1)}>
-            <ChevronLeft className="mr-2 h-4 w-4" /> Back
+        <div className="max-w-md">
+          <Button variant="ghost" size="sm" className="mb-6 rounded-full text-[#5f6368]" onClick={() => setStep(1)}>
+            <ChevronLeft className="mr-2 h-4 w-4" /> Back to calendar
           </Button>
-          <h3 className="text-xl font-bold mb-6">Enter Details</h3>
-          <div className="space-y-4">
+          <h3 className="text-xl font-normal text-[#1f1f1f] mb-8">Enter your details</h3>
+          <div className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="name">Your Name *</Label>
+              <Label htmlFor="name" className="text-sm font-medium text-[#1f1f1f]">Name</Label>
               <Input
                 id="name"
                 value={guestName}
                 onChange={(e) => setGuestName(e.target.value)}
-                placeholder="John Doe"
+                placeholder="What should we call you?"
+                className="h-12 rounded-lg"
                 required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Your Email *</Label>
+              <Label htmlFor="email" className="text-sm font-medium text-[#1f1f1f]">Email address</Label>
               <Input
                 id="email"
                 type="email"
                 value={guestEmail}
                 onChange={(e) => setGuestEmail(e.target.value)}
-                placeholder="john@example.com"
+                placeholder="Where should we send the invite?"
+                className="h-12 rounded-lg"
                 required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="notes">Notes</Label>
+              <Label htmlFor="notes" className="text-sm font-medium text-[#1f1f1f]">Notes</Label>
               <textarea
                 id="notes"
-                className="w-full min-h-[100px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                className="w-full min-h-[120px] rounded-lg border border-gray-200 bg-transparent px-3 py-2 text-sm outline-none focus:border-[#1a73e8] focus:ring-1 focus:ring-[#1a73e8] transition-all placeholder:text-[#5f6368]"
                 value={guestNotes}
                 onChange={(e) => setGuestNotes(e.target.value)}
                 placeholder="Anything else you'd like to share?"
               />
             </div>
             <Button
-              className="w-full"
+              className="w-full h-12 rounded-full mt-4 bg-[#1a73e8] hover:bg-[#1557b0]"
               size="lg"
               onClick={handleBooking}
               disabled={isLoading || !guestName || !guestEmail}
             >
               {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-              Confirm Booking
+              Confirm booking
             </Button>
           </div>
         </div>
