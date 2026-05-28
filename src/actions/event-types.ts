@@ -63,6 +63,49 @@ export async function deleteEventType(id: string) {
     throw new Error("Unauthorized");
   }
 
+  // Soft delete
+  await db.update(eventTypes)
+    .set({ isDeleted: true })
+    .where((et, { eq, and }) => and(eq(et.id, id), eq(et.userId, userId)));
+
+  revalidatePath("/dashboard");
+}
+
+export async function toggleStarEventType(id: string, isStarred: boolean) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  await db.update(eventTypes)
+    .set({ isStarred })
+    .where((et, { eq, and }) => and(eq(et.id, id), eq(et.userId, userId)));
+
+  revalidatePath("/dashboard");
+}
+
+export async function restoreEventType(id: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  await db.update(eventTypes)
+    .set({ isDeleted: false })
+    .where((et, { eq, and }) => and(eq(et.id, id), eq(et.userId, userId)));
+
+  revalidatePath("/dashboard");
+}
+
+export async function permanentlyDeleteEventType(id: string) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
   await db.delete(eventTypes)
     .where((et, { eq, and }) => and(eq(et.id, id), eq(et.userId, userId)));
 

@@ -18,6 +18,8 @@ export const eventTypes = sqliteTable("event_types", {
   description: text("description"),
   duration: integer("duration").notNull(), // in minutes
   isActive: integer("is_active", { mode: "boolean" }).default(true).notNull(),
+  isStarred: integer("is_starred", { mode: "boolean" }).default(false).notNull(),
+  isDeleted: integer("is_deleted", { mode: "boolean" }).default(false).notNull(),
   slug: text("slug").notNull(),
   createdAt: integer("created_at", { mode: "timestamp" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
   updatedAt: integer("updated_at", { mode: "timestamp" }).default(sql`CURRENT_TIMESTAMP`).notNull(),

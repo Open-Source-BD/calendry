@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
+import { OfflineProvider } from "@/hooks/use-offline";
 import "./globals.css";
 
 const roboto = Roboto({
@@ -30,8 +31,10 @@ export default function RootLayout({
           className={`${roboto.variable} font-sans antialiased`}
           suppressHydrationWarning
         >
-          {children}
-          <Toaster />
+          <OfflineProvider>
+            {children}
+            <Toaster />
+          </OfflineProvider>
         </body>
       </html>
     </ClerkProvider>

@@ -1,19 +1,26 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+import { Calendar, Clock, Cloud, Home, Star, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Clock, Calendar, Star, Trash2, Cloud, Home } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 import { Button } from "./ui/button";
 
 const navItems = [
   { icon: Home, label: "Home", href: "/dashboard" },
   { icon: Clock, label: "Availability", href: "/dashboard/availability" },
   { icon: Calendar, label: "My Bookings", href: "/dashboard/bookings" },
+  { icon: Star, label: "Starred", href: "/dashboard/starred" },
+  { icon: Trash2, label: "Trash", href: "/dashboard/trash" },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
+
+  const handleUtilityClick = (name: string) => {
+    toast.info(`${name} feature coming soon!`);
+  };
 
   return (
     <aside className="w-[256px] h-[calc(100vh-64px)] fixed left-0 top-16 bg-[#f8f9fa] overflow-y-auto px-4 py-4 hidden md:flex flex-col">
@@ -43,33 +50,19 @@ export function Sidebar() {
               href={item.href}
               className={cn(
                 "flex items-center gap-3 px-4 py-2.5 rounded-r-full text-sm font-medium transition-colors",
-                isActive 
-                  ? "bg-[#e2e7ff] text-[#0b57d0]" 
-                  : "text-[#3c4043] hover:bg-[#1f1f1f0a]"
+                isActive
+                  ? "bg-[#e2e7ff] text-[#0b57d0]"
+                  : "text-[#3c4043] hover:bg-[#1f1f1f0a]",
               )}
             >
-              <item.icon size={20} className={cn(isActive ? "text-[#0b57d0]" : "text-[#3c4043]")} />
+              <item.icon
+                size={20}
+                className={cn(isActive ? "text-[#0b57d0]" : "text-[#3c4043]")}
+              />
               {item.label}
             </Link>
           );
         })}
-
-        <div className="my-4 border-t border-gray-200" />
-
-        <button
-          onClick={() => handleUtilityClick("Starred items")}
-          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-r-full text-sm font-medium text-[#3c4043] hover:bg-[#1f1f1f0a] text-left"
-        >
-          <Star size={20} />
-          Starred
-        </button>
-        <button
-          onClick={() => handleUtilityClick("Trash")}
-          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-r-full text-sm font-medium text-[#3c4043] hover:bg-[#1f1f1f0a] text-left"
-        >
-          <Trash2 size={20} />
-          Trash
-        </button>
       </nav>
 
       {/* Storage Indicator */}
@@ -82,7 +75,10 @@ export function Sidebar() {
           <div className="bg-[#1a73e8] h-full w-[12%]" />
         </div>
         <p className="text-xs text-[#5f6368] mt-2">1.8 GB of 15 GB used</p>
-        <Button variant="outline" className="mt-4 w-full rounded-full border-gray-300 text-[#1a73e8] hover:bg-[#eaf1fb] h-9">
+        <Button
+          variant="outline"
+          className="mt-4 w-full rounded-full border-gray-300 text-[#1a73e8] hover:bg-[#eaf1fb] h-9"
+        >
           Get more storage
         </Button>
       </div>

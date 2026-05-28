@@ -1,11 +1,12 @@
-import { CopyLinkButton } from "@/components/copy-link-button";
 import { Button } from "@/components/ui/button";
 import { db } from "@/db";
+import { users } from "@/db/schema";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { Clock, Users, Video } from "lucide-react";
+import { Users } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { BookingsList } from "./bookings-list";
+import { EventCard } from "@/components/event-card";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +47,7 @@ export default async function DashboardPage({
   const username = existingUser?.username || defaultUsername;
 
   let userEventTypes = await db.query.eventTypes.findMany({
-    where: (et, { eq }) => eq(et.userId, userId),
+    where: (et, { eq, and }) => and(eq(et.userId, userId), eq(et.isDeleted, false)),
   });
 
   let allBookings = await db.query.bookings.findMany({
@@ -102,44 +103,10 @@ export default async function DashboardPage({
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {userEventTypes.map((event) => (
-                <div
-                  key={event.id}
-                  className="google-card p-6 flex flex-col h-full bg-white border border-gray-200"
-                >
-                  <div className="mb-6">
-                    <div className="h-12 w-12 rounded-full bg-[#e8f1fe] flex items-center justify-center text-[#1a73e8]">
-                      <Video size={24} />
-                    </div>
-                  </div>
-
-                  <h3 className="text-xl font-medium text-[#1f1f1f] mb-1">
-                    {event.name}
-                  </h3>
-                  <p className="text-sm text-[#5f6368] line-clamp-1 mb-4">
-                    {event.description || "No description provided."}
-                  </p>
-
-                  <div className="flex items-center text-sm text-[#5f6368] mb-8">
-                    <Clock className="mr-2 h-4 w-4" />
-                    {event.duration} minutes
-                  </div>
-
-                  <div className="flex gap-2 pt-4 border-t border-gray-100 mt-auto">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="px-6 rounded-full text-[#1a73e8] hover:bg-[#f8f9fa] font-medium"
-                      asChild
-                    >
-                      <Link href={`/dashboard/events/${event.id}`}>Edit</Link>
-                    </Button>
-                    <CopyLinkButton
-                      url={`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/${username}/${event.slug}`}
-                    />
-                  </div>
-                </div>
+                <EventCard key={event.id} event={event} username={username} />
               ))}
             </div>
+
           )}
         </section>
 

@@ -6,13 +6,20 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Calendar as CalendarIcon, Search, HelpCircle, Settings, Grid, SlidersHorizontal, CheckCircle2, X } from "lucide-react";
 import { toast } from "sonner";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Switch } from "@/components/ui/switch";
+import { useOffline } from "@/hooks/use-offline";
 
 export function Navbar() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
+  const { isOfflineMode, toggleOfflineMode } = useOffline();
 
   useEffect(() => {
+    const currentQ = searchParams.get("q") || "";
+    if (searchQuery === currentQ) return;
+
     const delayDebounceFn = setTimeout(() => {
       const params = new URLSearchParams(searchParams.toString());
       if (searchQuery) {
@@ -79,12 +86,24 @@ export function Navbar() {
 
         {/* Right side: Utilities and Profile */}
         <div className="flex items-center gap-1 md:gap-2">
-          <button 
-            onClick={() => handleUtilityClick("Task list")}
-            className="p-2.5 hover:bg-gray-100 rounded-full text-[#5f6368] hidden sm:block"
-          >
-            <CheckCircle2 size={24} />
-          </button>
+          <Popover>
+            <PopoverTrigger render={
+              <button 
+                className="p-2.5 hover:bg-gray-100 rounded-full text-[#5f6368] hidden sm:block outline-none"
+              >
+                <CheckCircle2 size={24} />
+              </button>
+            } />
+            <PopoverContent align="end" className="w-[320px] p-0 overflow-hidden border-none shadow-xl rounded-lg">
+              <div className="bg-[#f1f3f4] px-6 py-4 flex items-center justify-between">
+                <span className="text-lg font-normal text-[#1f1f1f]">Offline preview</span>
+                <Switch 
+                  checked={isOfflineMode}
+                  onCheckedChange={toggleOfflineMode}
+                />
+              </div>
+            </PopoverContent>
+          </Popover>
           <button 
             onClick={() => handleUtilityClick("Support")}
             className="p-2.5 hover:bg-gray-100 rounded-full text-[#5f6368] hidden sm:block"
