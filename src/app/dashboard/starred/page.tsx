@@ -29,19 +29,26 @@ export default async function StarredPage() {
     <div className="p-4 md:p-8">
       <div className="mb-8">
         <h1 className="text-2xl font-normal text-[#1f1f1f]">Starred</h1>
-        <p className="text-sm text-[#5f6368]">Quickly access your favorite event types.</p>
       </div>
 
       {starredEvents.length === 0 ? (
-        <div className="flex flex-col items-center justify-center p-12 text-center bg-white border border-dashed border-gray-300 rounded-2xl">
-          <Star className="h-12 w-12 text-gray-200 mb-4" />
-          <p className="text-[#5f6368]">No starred event types yet.</p>
+        <div className="flex flex-col items-center justify-center p-20 text-center bg-white border border-dashed border-gray-300 rounded-[24px]">
+          <div className="h-20 w-20 rounded-full bg-[#f8f9fa] flex items-center justify-center mb-6">
+            <Star className="h-10 w-10 text-gray-300" />
+          </div>
+          <h2 className="text-xl font-normal text-[#1f1f1f] mb-2">No starred event types</h2>
+          <p className="text-[#5f6368] max-w-xs">When you star event types, they&apos;ll appear here for quick access.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {starredEvents.map((event) => (
-            <EventCard key={event.id} event={event} username={username} />
-          ))}
+        <div className="space-y-6">
+          <div className="flex items-center gap-2 mb-6">
+            <h2 className="text-base font-medium text-[#444746]">Favorite Event Types</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {starredEvents.map((event) => (
+              <EventCard key={event.id} event={event} username={username} />
+            ))}
+          </div>
         </div>
       )}
     </div>
