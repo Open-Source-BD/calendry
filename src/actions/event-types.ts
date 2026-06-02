@@ -5,6 +5,7 @@ import { eventTypes } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
+import { and, eq } from "drizzle-orm";
 
 export async function createEventType(values: {
   name: string;
@@ -51,7 +52,7 @@ export async function updateEventType(id: string, values: {
       slug: values.slug,
       isActive: values.isActive,
     })
-    .where((et, { eq, and }) => and(eq(et.id, id), eq(et.userId, userId)));
+    .where(and(eq(eventTypes.id, id), eq(eventTypes.userId, userId)));
 
   revalidatePath("/dashboard");
 }
@@ -66,7 +67,7 @@ export async function deleteEventType(id: string) {
   // Soft delete
   await db.update(eventTypes)
     .set({ isDeleted: true })
-    .where((et, { eq, and }) => and(eq(et.id, id), eq(et.userId, userId)));
+    .where(and(eq(eventTypes.id, id), eq(eventTypes.userId, userId)));
 
   revalidatePath("/dashboard");
 }
@@ -80,7 +81,7 @@ export async function toggleStarEventType(id: string, isStarred: boolean) {
 
   await db.update(eventTypes)
     .set({ isStarred })
-    .where((et, { eq, and }) => and(eq(et.id, id), eq(et.userId, userId)));
+    .where(and(eq(eventTypes.id, id), eq(eventTypes.userId, userId)));
 
   revalidatePath("/dashboard");
 }
@@ -94,7 +95,7 @@ export async function restoreEventType(id: string) {
 
   await db.update(eventTypes)
     .set({ isDeleted: false })
-    .where((et, { eq, and }) => and(eq(et.id, id), eq(et.userId, userId)));
+    .where(and(eq(eventTypes.id, id), eq(eventTypes.userId, userId)));
 
   revalidatePath("/dashboard");
 }
@@ -107,7 +108,7 @@ export async function permanentlyDeleteEventType(id: string) {
   }
 
   await db.delete(eventTypes)
-    .where((et, { eq, and }) => and(eq(et.id, id), eq(et.userId, userId)));
+    .where(and(eq(eventTypes.id, id), eq(eventTypes.userId, userId)));
 
   revalidatePath("/dashboard");
 }

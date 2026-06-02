@@ -3,7 +3,7 @@
 import { db } from "@/db";
 import { availability } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
-import { eq, and } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
 

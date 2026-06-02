@@ -43,7 +43,8 @@ function AvailabilityRow({ day, initialData }: AvailabilityRowProps) {
         isActive,
       });
       toast.success(`${day.charAt(0).toUpperCase() + day.slice(1)} schedule updated`);
-    } catch (error) {
+    } catch (err) {
+      console.error(err);
       toast.error("Failed to update availability");
     } finally {
       setIsLoading(false);
@@ -96,7 +97,14 @@ function AvailabilityRow({ day, initialData }: AvailabilityRowProps) {
   );
 }
 
-export function AvailabilityForm({ initialData }: { initialData: any[] }) {
+interface Availability {
+  day: string;
+  startTime: string;
+  endTime: string;
+  isActive: boolean;
+}
+
+export function AvailabilityForm({ initialData }: { initialData: Availability[] }) {
   return (
     <div className="flex flex-col">
       {DAYS.map((day) => {

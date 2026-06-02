@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/navbar";
 import { Sidebar } from "@/components/sidebar";
 import { RightSidebar } from "@/components/right-sidebar";
+import { Suspense } from "react";
 
 export default function DashboardLayout({
   children,
@@ -9,7 +10,9 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="min-h-screen bg-[#f8f9fa]">
-      <Navbar />
+      <Suspense fallback={<div className="h-16 bg-[#f8f9fa] border-b" />}>
+        <Navbar />
+      </Suspense>
       <div className="flex">
         <Sidebar />
         <main className="flex-1 md:ml-[256px] lg:mr-[56px] min-h-[calc(100vh-64px)] p-2">

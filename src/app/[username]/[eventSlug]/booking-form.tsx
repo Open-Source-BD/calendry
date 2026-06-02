@@ -11,7 +11,15 @@ import { getAvailableSlotsAction } from "@/actions/availability-fetch";
 import { createBookingAction } from "@/actions/bookings";
 import { Loader2, ChevronLeft } from "lucide-react";
 
-export function BookingForm({ eventType, hostId }: { eventType: any; hostId: string }) {
+interface EventType {
+  id: string;
+  name: string;
+  duration: number;
+  description: string | null;
+  slug: string;
+}
+
+export function BookingForm({ eventType, hostId }: { eventType: EventType; hostId: string }) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
@@ -56,7 +64,8 @@ export function BookingForm({ eventType, hostId }: { eventType: any; hostId: str
       });
       setStep(3);
       toast.success("Meeting booked successfully!");
-    } catch (error) {
+    } catch (err) {
+      console.error(err);
       toast.error("Failed to book meeting");
     } finally {
       setIsLoading(false);

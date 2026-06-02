@@ -32,17 +32,26 @@ import {
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   description: z.string().optional(),
-  duration: z.coerce.number().min(1, "Duration must be at least 1 minute"),
+  duration: z.number().min(1, "Duration must be at least 1 minute"),
   slug: z.string().min(2, "Slug must be at least 2 characters"),
   isActive: z.boolean(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-export function EditEventTypeForm({ eventType }: { eventType: any }) {
+interface EventType {
+  id: string;
+  name: string;
+  description: string | null;
+  duration: number;
+  slug: string;
+  isActive: boolean;
+}
+
+export function EditEventTypeForm({ eventType }: { eventType: EventType }) {
   const router = useRouter();
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema) as any,
+    resolver: zodResolver(formSchema),
     defaultValues: {
       name: eventType.name,
       description: eventType.description || "",
@@ -58,7 +67,8 @@ export function EditEventTypeForm({ eventType }: { eventType: any }) {
       toast.success("Event type updated!");
       router.push("/dashboard");
       router.refresh();
-    } catch (error) {
+    } catch (err) {
+      console.error(err);
       toast.error("Something went wrong");
     }
   }
@@ -69,7 +79,8 @@ export function EditEventTypeForm({ eventType }: { eventType: any }) {
       toast.success("Event type deleted");
       router.push("/dashboard");
       router.refresh();
-    } catch (error) {
+    } catch (err) {
+      console.error(err);
       toast.error("Failed to delete event type");
     }
   }

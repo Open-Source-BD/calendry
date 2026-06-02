@@ -18,17 +18,24 @@ export function ConnectGoogleButton() {
       );
 
       if (googleAccount) {
-        // Re-authenticate to request new scopes
-        await googleAccount.reauthenticateWithRedirect({
+        // In Clerk v5, we use reauthorize to request new scopes for an existing account
+        await googleAccount.reauthorize({
           redirectUrl: "/dashboard",
-          // @ts-ignore
           additionalScopes: [
             "https://www.googleapis.com/auth/calendar.readonly",
             "https://www.googleapis.com/auth/calendar.events"
           ],
         });
       } else {
-        toast.error("Google account not found. Please sign in with Google.");
+        // Link a new Google account
+        await user.createExternalAccount({
+          strategy: "oauth_google",
+          redirectUrl: "/dashboard",
+          additionalScopes: [
+            "https://www.googleapis.com/auth/calendar.readonly",
+            "https://www.googleapis.com/auth/calendar.events"
+          ],
+        });
       }
     } catch (error) {
       console.error(error);

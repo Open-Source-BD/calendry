@@ -21,7 +21,7 @@ import { createEventType } from "@/actions/event-types";
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   description: z.string().optional(),
-  duration: z.coerce.number().min(1, "Duration must be at least 1 minute"),
+  duration: z.number().min(1, "Duration must be at least 1 minute"),
   slug: z.string().min(2, "Slug must be at least 2 characters"),
 });
 
@@ -35,7 +35,7 @@ type FormValues = {
 export default function NewEventPage() {
   const router = useRouter();
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema) as any,
+    resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       description: "",
@@ -50,7 +50,8 @@ export default function NewEventPage() {
       toast.success("Event type created!");
       router.push("/dashboard");
       router.refresh();
-    } catch (error) {
+    } catch (err) {
+      console.error(err);
       toast.error("Something went wrong");
     }
   }

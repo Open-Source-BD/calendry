@@ -31,13 +31,20 @@ export function BookingsList({
   initialBookings, 
   eventTypes 
 }: { 
-  initialBookings: any[], 
+  initialBookings: {
+    id: string;
+    guestName: string;
+    guestEmail: string;
+    guestNotes: string | null;
+    startTime: Date | number;
+    endTime: Date | number;
+    eventTypeId: string;
+  }[], 
   eventTypes: EventType[] 
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  // Pagination logic
   const totalPages = Math.ceil(initialBookings.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentBookings = initialBookings.slice(startIndex, startIndex + itemsPerPage);

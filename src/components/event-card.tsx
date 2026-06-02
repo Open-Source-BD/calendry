@@ -104,8 +104,10 @@ export function EventCard({ event, username, isTrashView = false }: EventCardPro
                 </>
               ) : (
                 <>
-                  <DropdownMenuItem asChild className="cursor-pointer">
-                    <Link href={`/dashboard/events/${event.id}`}>Edit</Link>
+                  <DropdownMenuItem 
+                    render={<Link href={`/dashboard/events/${event.id}`} className="cursor-pointer" />}
+                  >
+                    Edit
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleMoveToTrash} className="cursor-pointer text-red-600">
                     <Trash2 className="mr-2 h-4 w-4" /> Move to Trash

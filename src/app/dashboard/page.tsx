@@ -176,6 +176,6 @@ export default async function DashboardPage({
   );
 }
 
-function getEventName(id: string, types: any[]) {
+function getEventName(id: string, types: { id: string; name: string }[]) {
     return types.find(t => t.id === id)?.name || "Meeting";
 }

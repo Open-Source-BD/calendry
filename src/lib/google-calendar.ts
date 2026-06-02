@@ -46,9 +46,12 @@ export async function getBusySlots(userId: string, start: Date, end: Date) {
     });
 
     return response.data.calendars?.primary?.busy || [];
-  } catch (error: any) {
-    if (error.code === 403 || error.message?.includes("insufficient authentication scopes")) {
-      console.error("Insufficient Google Scopes. Please ensure 'https://www.googleapis.com/auth/calendar.readonly' is enabled in Clerk.");
+  } catch (error: unknown) {
+    if (error && typeof error === "object" && "code" in error) {
+      const err = error as { code?: number; message?: string };
+      if (err.code === 403 || err.message?.includes("insufficient authentication scopes")) {
+        console.error("Insufficient Google Scopes. Please ensure 'https://www.googleapis.com/auth/calendar.readonly' is enabled in Clerk.");
+      }
     }
     throw error;
   }
