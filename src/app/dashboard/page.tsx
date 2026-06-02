@@ -25,24 +25,50 @@ export default async function DashboardPage({
   }
 
   // Sync user
-  let existingUser = await db.query.users.findFirst({
-    where: (u, { eq }) => eq(u.id, userId),
-  });
-
-  const email = user.emailAddresses[0].emailAddress;
-  const defaultUsername = email.split("@")[0];
-
-  if (!existingUser) {
-    await db.insert(users).values({
-      id: userId,
-      email: email,
-      username: defaultUsername,
-      name: `${user.firstName} ${user.lastName}`,
-      imageUrl: user.imageUrl,
-    });
+  let existingUser = null;
+  try {
     existingUser = await db.query.users.findFirst({
       where: (u, { eq }) => eq(u.id, userId),
     });
+  } catch (err) {
+    console.error("Database query failed:", err);
+    // If query fails, we can't proceed safely
+    throw new Error("Could not connect to database. Please check your configuration.");
+  }
+
+  if (!existingUser && user) {
+    const email = user.emailAddresses[0]?.emailAddress;
+    if (!email) {
+        throw new Error("User email not found in Clerk profile.");
+    }
+    
+    const defaultUsername = email.split("@")[0] + "_" + Date.now();
+    const fullName = [user.firstName, user.lastName].filter(Boolean).join(" ") || "Guest User";
+
+    try {
+      await db.insert(users).values({
+        id: userId,
+        email: email,
+        username: defaultUsername,
+        name: fullName,
+        imageUrl: user.imageUrl || null,
+      });
+      
+      // Fetch again after successful insert
+      existingUser = await db.query.users.findFirst({
+        where: (u, { eq }) => eq(u.id, userId),
+      });
+    } catch (err) {
+      console.error("User sync insert failed:", err);
+      // Try one more time to fetch (maybe it was already inserted by a parallel request)
+      existingUser = await db.query.users.findFirst({
+        where: (u, { eq }) => eq(u.id, userId),
+      });
+      
+      if (!existingUser) {
+          throw new Error("Failed to synchronize user data with the database.");
+      }
+    }
   }
 
   const username = existingUser?.username || defaultUsername;
