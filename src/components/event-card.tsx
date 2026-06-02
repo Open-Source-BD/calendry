@@ -67,19 +67,20 @@ export function EventCard({ event, username, isTrashView = false }: EventCardPro
   };
 
   return (
-    <div className="google-card p-6 flex flex-col h-full bg-white border border-gray-200 group relative">
+    <div className="google-card p-6 flex flex-col h-full bg-white border border-transparent group relative transition-all duration-300 hover:border-gray-200">
       <div className="flex justify-between items-start mb-6">
-        <div className="h-12 w-12 rounded-full bg-[#e8f1fe] flex items-center justify-center text-[#1a73e8]">
+        <div className="h-12 w-12 rounded-full bg-[#f0f4f9] flex items-center justify-center text-[#0b57d0] transition-colors group-hover:bg-[#dce9fd]">
           <Video size={24} />
         </div>
         
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200 translate-y-1 group-hover:translate-y-0">
           {!isTrashView && (
             <button 
               onClick={handleToggleStar}
+              aria-label={event.isStarred ? "Remove from Starred" : "Add to Starred"}
               className={cn(
                 "p-2 rounded-full transition-colors",
-                event.isStarred ? "text-[#fbbc04]" : "text-gray-400 hover:bg-gray-100"
+                event.isStarred ? "text-[#fbbc04]" : "text-[#444746] hover:bg-[#1f1f1f0a]"
               )}
             >
               <Star size={20} fill={event.isStarred ? "currentColor" : "none"} />
@@ -88,7 +89,10 @@ export function EventCard({ event, username, isTrashView = false }: EventCardPro
           
           <DropdownMenu>
             <DropdownMenuTrigger render={
-              <button className="p-2 rounded-full text-gray-400 hover:bg-gray-100 transition-colors" />
+              <button 
+                aria-label="More actions"
+                className="p-2 rounded-full text-[#444746] hover:bg-[#1f1f1f0a] transition-colors" 
+              />
             }>
               <MoreVertical size={20} />
             </DropdownMenuTrigger>

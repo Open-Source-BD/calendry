@@ -49,15 +49,15 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 px-4 py-2.5 rounded-r-full text-sm font-medium transition-colors",
+                "flex items-center gap-3 px-4 py-3 rounded-r-full text-sm font-medium transition-all duration-200",
                 isActive
                   ? "bg-[#e2e7ff] text-[#0b57d0]"
-                  : "text-[#3c4043] hover:bg-[#1f1f1f0a]",
+                  : "text-[#444746] hover:bg-[#1f1f1f0a]",
               )}
             >
               <item.icon
                 size={20}
-                className={cn(isActive ? "text-[#0b57d0]" : "text-[#3c4043]")}
+                className={cn("transition-colors duration-200", isActive ? "text-[#0b57d0]" : "text-[#444746]")}
               />
               {item.label}
             </Link>

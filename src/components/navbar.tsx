@@ -42,11 +42,11 @@ export function Navbar() {
       <div className="px-4 h-16 flex items-center justify-between">
         {/* Left side: Logo and App Name */}
         <div className="flex items-center gap-2 min-w-[232px]">
-          <Link href="/dashboard" className="flex items-center gap-3 group p-2 hover:bg-gray-100 rounded-lg transition-colors">
-            <div className="bg-[#1a73e8] p-1.5 rounded-lg text-white">
+          <Link href="/dashboard" className="flex items-center gap-3 group p-2 hover:bg-[#1f1f1f0a] rounded-lg transition-all duration-200">
+            <div className="bg-[#0b57d0] p-1.5 rounded-lg text-white">
               <CalendarIcon size={24} />
             </div>
-            <span className="text-[22px] font-normal text-[#5f6368]">
+            <span className="text-[22px] font-normal text-[#444746] tracking-tight">
               Calendra
             </span>
           </Link>
@@ -56,19 +56,21 @@ export function Navbar() {
         <div className="hidden md:flex flex-1 max-w-[720px]">
           <div className="relative w-full group">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-[#5f6368]" />
+              <Search className="h-5 w-5 text-[#444746]" />
             </div>
             <input
               type="text"
               placeholder="Search in Calendra"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="block w-full pl-12 pr-12 py-3 bg-[#eaf1fb] border-transparent rounded-full focus:bg-white focus:shadow-md transition-all text-base outline-none"
+              aria-label="Search events and bookings"
+              className="block w-full pl-12 pr-12 py-3 bg-[#eaf1fb] border-transparent rounded-full focus:bg-white focus:shadow-[0_1px_1px_0_rgba(65,69,73,0.3),0_1px_3px_1px_rgba(65,69,73,0.15)] transition-all duration-200 text-base outline-none"
             />
             <div className="absolute inset-y-0 right-0 pr-4 flex items-center gap-1">
               {searchQuery && (
                 <button 
                   onClick={() => setSearchQuery("")}
+                  aria-label="Clear search"
                   className="p-1.5 hover:bg-gray-200 rounded-full text-[#5f6368]"
                 >
                   <X size={20} />
@@ -76,6 +78,7 @@ export function Navbar() {
               )}
               <button 
                 onClick={() => handleUtilityClick("Search filters")}
+                aria-label="Search filters"
                 className="p-1.5 hover:bg-gray-200 rounded-full text-[#5f6368]"
               >
                 <SlidersHorizontal size={20} />
@@ -89,6 +92,7 @@ export function Navbar() {
           <Popover>
             <PopoverTrigger render={
               <button 
+                aria-label="Offline status"
                 className="p-2.5 hover:bg-gray-100 rounded-full text-[#5f6368] hidden sm:block outline-none"
               >
                 <CheckCircle2 size={24} />
@@ -106,12 +110,14 @@ export function Navbar() {
           </Popover>
           <button 
             onClick={() => handleUtilityClick("Support")}
+            aria-label="Support"
             className="p-2.5 hover:bg-gray-100 rounded-full text-[#5f6368] hidden sm:block"
           >
             <HelpCircle size={24} />
           </button>
           <button 
             onClick={() => handleUtilityClick("Settings")}
+            aria-label="Settings"
             className="p-2.5 hover:bg-gray-100 rounded-full text-[#5f6368] hidden sm:block"
           >
             <Settings size={24} />
@@ -122,6 +128,7 @@ export function Navbar() {
             rel="noopener noreferrer"
             className="p-2.5 hover:bg-gray-100 rounded-full text-[#5f6368] hidden sm:block"
             title="Google Apps"
+            aria-label="Google Apps"
           >
             <Grid size={24} />
           </a>

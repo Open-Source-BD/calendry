@@ -56,56 +56,56 @@
   --popover: #ffffff;
   --popover-foreground: #1f1f1f;
   
-  /* Google Blue: #1a73e8 (M3 Primary) */
-  --primary: #1a73e8; 
+  /* Google Blue: #0b57d0 (M3 Primary) */
+  --primary: #0b57d0; 
   --primary-foreground: #ffffff;
   
-  /* Google Surface: #f8f9fa */
-  --secondary: #f1f3f4;
-  --secondary-foreground: #3c4043;
+  /* Google Surface / Secondary */
+  --secondary: #f0f4f9;
+  --secondary-foreground: #444746;
   
   --muted: #f8f9fa;
   --muted-foreground: #5f6368;
   
-  --accent: #e8f0fe;
-  --accent-foreground: #1a73e8;
+  --accent: #e3e3e3;
+  --accent-foreground: #1f1f1f;
   
-  --destructive: #d93025;
+  --destructive: #b3261e;
   
-  /* Google Border: #dadce0 */
-  --border: #dadce0;
-  --input: #dadce0;
-  --ring: #1a73e8;
+  /* Google Border: #c4c7c5 (M3 Outline) */
+  --border: #c4c7c5;
+  --input: #c4c7c5;
+  --ring: #0b57d0;
   
   --radius: 12px;
   
-  --sidebar: #ffffff;
-  --sidebar-foreground: #3c4043;
-  --sidebar-primary: #1a73e8;
+  --sidebar: #f8f9fa;
+  --sidebar-foreground: #444746;
+  --sidebar-primary: #0b57d0;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f1f3f4;
-  --sidebar-accent-foreground: #1a73e8;
-  --sidebar-border: #dadce0;
-  --sidebar-ring: #1a73e8;
+  --sidebar-accent: #f0f4f9;
+  --sidebar-accent-foreground: #0b57d0;
+  --sidebar-border: #e3e3e3;
+  --sidebar-ring: #0b57d0;
 }
 
 .dark {
-  --background: #1f1f1f;
-  --foreground: #e8eaed;
-  --card: #2d2e30;
-  --card-foreground: #e8eaed;
-  --popover: #2d2e30;
-  --popover-foreground: #e8eaed;
-  --primary: #8ab4f8;
-  --primary-foreground: #202124;
-  --secondary: #3c4043;
-  --secondary-foreground: #e8eaed;
-  --muted: #3c4043;
+  --background: #111111;
+  --foreground: #e3e3e3;
+  --card: #1f1f1f;
+  --card-foreground: #e3e3e3;
+  --popover: #1f1f1f;
+  --popover-foreground: #e3e3e3;
+  --primary: #a8c7fa;
+  --primary-foreground: #062e6f;
+  --secondary: #333537;
+  --secondary-foreground: #e3e3e3;
+  --muted: #1f1f1f;
   --muted-foreground: #9aa0a6;
   --accent: #3c4043;
-  --accent-foreground: #8ab4f8;
-  --border: #3c4043;
-  --input: #3c4043;
+  --accent-foreground: #a8c7fa;
+  --border: #444746;
+  --input: #444746;
 }
 
 @layer base {
@@ -121,15 +121,15 @@
 @layer components {
   /* Google Button Styles */
   .google-btn-primary {
-    @apply inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-primary text-primary-foreground hover:shadow-md active:shadow-sm;
+    @apply inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-primary text-primary-foreground hover:shadow-[0_1px_3px_1px_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.3)] active:shadow-none hover:bg-primary/95;
   }
   
   .google-btn-outline {
-    @apply inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none border border-border bg-transparent hover:bg-secondary text-foreground;
+    @apply inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none border border-input bg-transparent hover:bg-secondary text-secondary-foreground;
   }
 
   .google-card {
-    @apply rounded-2xl border border-border bg-card text-card-foreground shadow-sm transition-shadow hover:shadow-md;
+    @apply rounded-[24px] border border-transparent bg-white text-card-foreground shadow-none transition-all hover:shadow-[0_1px_2px_rgba(60,64,67,0.3),0_1px_3px_1px_rgba(60,64,67,0.15)] hover:bg-[#fdfdfd];
   }
 
   .reveal-up {

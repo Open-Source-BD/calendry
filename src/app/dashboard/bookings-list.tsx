@@ -59,17 +59,17 @@ export function BookingsList({
             <DialogTrigger 
               nativeButton={false}
               render={
-                <div className="google-card p-5 flex items-center justify-between cursor-pointer bg-white border border-gray-100 mb-3" />
+                <div className="google-card p-5 flex items-center justify-between cursor-pointer bg-white border border-transparent mb-3 transition-all duration-200 hover:border-gray-200 hover:bg-[#fdfdfd]" />
               }
             >
               <div className="flex items-center gap-4">
-                <div className="bg-[#e8f1fe] h-12 w-12 rounded-full flex items-center justify-center text-[#1a73e8] font-medium text-lg">
+                <div className="bg-[#f0f4f9] h-12 w-12 rounded-full flex items-center justify-center text-[#0b57d0] font-medium text-lg transition-colors group-hover:bg-[#dce9fd]">
                   {booking.guestName.charAt(0).toUpperCase()}
                 </div>
                 <div>
                   <div className="text-base font-medium text-[#1f1f1f] mb-1">{booking.guestName}</div>
-                  <div className="flex items-center gap-2 text-sm text-[#5f6368]">
-                    <span className="bg-[#f1f3f4] px-2 py-0.5 rounded text-xs font-medium text-[#3c4043]">
+                  <div className="flex items-center gap-2 text-sm text-[#444746]">
+                    <span className="bg-[#f1f3f4] px-2 py-0.5 rounded text-xs font-medium text-[#444746]">
                       {getEventName(booking.eventTypeId)}
                     </span>
                     <span className="text-gray-300">•</span>

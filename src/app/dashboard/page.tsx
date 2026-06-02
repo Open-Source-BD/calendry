@@ -95,19 +95,19 @@ export default async function DashboardPage({
                 Priority
               </h2>
             </div>
-            <div className="google-card p-6 bg-[#e8f0fe] border-[#d2e3fc] max-w-2xl flex items-center justify-between group cursor-pointer transition-all hover:bg-[#dce9fd]">
+            <div className="google-card p-6 bg-[#f0f4f9] border-transparent max-w-2xl flex items-center justify-between group cursor-pointer transition-all hover:shadow-md hover:bg-[#dce9fd]">
               <div className="flex items-center gap-6">
-                <div className="h-14 w-14 rounded-2xl bg-white flex items-center justify-center text-[#1a73e8] shadow-sm">
+                <div className="h-14 w-14 rounded-2xl bg-white flex items-center justify-center text-[#0b57d0] shadow-sm transition-colors group-hover:bg-[#e2e7ff]">
                   <Video size={28} />
                 </div>
                 <div>
-                  <div className="text-sm font-medium text-[#1a73e8] mb-1">Next meeting with {priorityBooking.guestName}</div>
+                  <div className="text-sm font-medium text-[#0b57d0] mb-1">Next meeting with {priorityBooking.guestName}</div>
                   <h3 className="text-xl font-medium text-[#1f1f1f]">
                     {format(new Date(priorityBooking.startTime), "h:mm a")} • {getEventName(priorityBooking.eventTypeId, userEventTypes)}
                   </h3>
                 </div>
               </div>
-              <Button variant="ghost" className="rounded-full h-10 w-10 p-0 text-[#1a73e8] opacity-0 group-hover:opacity-100 transition-opacity">
+              <Button variant="ghost" className="rounded-full h-10 w-10 p-0 text-[#0b57d0] opacity-0 group-hover:opacity-100 transition-opacity">
                 <ArrowRight size={20} />
               </Button>
             </div>
