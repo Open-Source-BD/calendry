@@ -87,10 +87,10 @@ export function EventCard({ event, username, isTrashView = false }: EventCardPro
           )}
           
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="p-2 rounded-full text-gray-400 hover:bg-gray-100 transition-colors">
-                <MoreVertical size={20} />
-              </button>
+            <DropdownMenuTrigger render={
+              <button className="p-2 rounded-full text-gray-400 hover:bg-gray-100 transition-colors" />
+            }>
+              <MoreVertical size={20} />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
               {isTrashView ? (

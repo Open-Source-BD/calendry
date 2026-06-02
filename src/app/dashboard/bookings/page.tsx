@@ -23,25 +23,32 @@ export default async function BookingsPage() {
   });
 
   return (
-    <div className="p-4 md:p-8">
+    <div className="p-4 md:p-8 reveal-fade">
       <div className="mb-8">
         <h1 className="text-2xl font-normal text-[#1f1f1f]">My Bookings</h1>
-        <p className="text-sm text-[#5f6368]">View and manage all your scheduled meetings.</p>
       </div>
 
-      <div className="google-card overflow-hidden">
-        {allBookings.length === 0 ? (
-          <div className="p-12 text-center bg-white">
-            <Users className="h-12 w-12 text-gray-200 mx-auto mb-4" />
-            <p className="text-[#5f6368]">No bookings found yet.</p>
+      {allBookings.length === 0 ? (
+        <div className="flex flex-col items-center justify-center p-20 text-center bg-white border border-dashed border-gray-300 rounded-[24px] reveal-up">
+          <div className="h-20 w-20 rounded-full bg-[#f8f9fa] flex items-center justify-center mb-6">
+            <Users className="h-10 w-10 text-gray-300" />
           </div>
-        ) : (
-          <BookingsList 
-            initialBookings={allBookings} 
-            eventTypes={userEventTypes.map(e => ({ id: e.id, name: e.name }))} 
-          />
-        )}
-      </div>
+          <h2 className="text-xl font-normal text-[#1f1f1f] mb-2">No bookings found</h2>
+          <p className="text-[#5f6368] max-w-sm">Scheduled meetings with your guests will appear here.</p>
+        </div>
+      ) : (
+        <div className="space-y-6 reveal-up">
+          <div className="flex items-center gap-2 mb-6">
+            <h2 className="text-base font-medium text-[#444746]">Upcoming & Past Meetings</h2>
+          </div>
+          <div className="google-card overflow-hidden">
+            <BookingsList 
+              initialBookings={allBookings} 
+              eventTypes={userEventTypes.map(e => ({ id: e.id, name: e.name }))} 
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

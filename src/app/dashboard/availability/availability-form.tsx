@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { updateAvailability } from "@/actions/availability";
 import { toast } from "sonner";
+import { Save } from "lucide-react";
 
 const DAYS = [
   "monday",
@@ -41,7 +42,7 @@ function AvailabilityRow({ day, initialData }: AvailabilityRowProps) {
         endTime,
         isActive,
       });
-      toast.success(`${day.charAt(0).toUpperCase() + day.slice(1)} updated`);
+      toast.success(`${day.charAt(0).toUpperCase() + day.slice(1)} schedule updated`);
     } catch (error) {
       toast.error("Failed to update availability");
     } finally {
@@ -50,41 +51,47 @@ function AvailabilityRow({ day, initialData }: AvailabilityRowProps) {
   };
 
   return (
-    <div className="flex items-center justify-between py-4 border-b last:border-0">
-      <div className="flex items-center gap-4 w-32">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border-b border-gray-100 last:border-0 hover:bg-[#f8f9fa] transition-colors group">
+      <div className="flex items-center gap-4 mb-4 sm:mb-0">
         <Switch
           checked={isActive}
           onCheckedChange={setIsActive}
         />
-        <span className="capitalize font-medium">{day}</span>
+        <div className="min-w-[100px]">
+          <span className="text-sm font-medium text-[#1f1f1f] capitalize">{day}</span>
+        </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <Input
-          type="time"
-          value={startTime}
-          onChange={(e) => setStartTime(e.target.value)}
-          disabled={!isActive}
-          className="w-32"
-        />
-        <span>-</span>
-        <Input
-          type="time"
-          value={endTime}
-          onChange={(e) => setEndTime(e.target.value)}
-          disabled={!isActive}
-          className="w-32"
-        />
+      <div className="flex flex-1 items-center justify-end gap-4">
+        {isActive ? (
+          <div className="flex items-center gap-2 animate-in fade-in slide-in-from-right-2 duration-300">
+            <Input
+              type="time"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              className="w-[130px] h-9 text-sm rounded-lg bg-white"
+            />
+            <span className="text-gray-400 text-sm">-</span>
+            <Input
+              type="time"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              className="w-[130px] h-9 text-sm rounded-lg bg-white"
+            />
+            <Button 
+              size="sm" 
+              variant="ghost" 
+              onClick={handleSave}
+              disabled={isLoading}
+              className="ml-2 rounded-full h-9 w-9 p-0 text-[#1a73e8] hover:bg-[#e8f0fe] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+            >
+              <Save size={18} />
+            </Button>
+          </div>
+        ) : (
+          <span className="text-sm text-[#5f6368] italic">Unavailable</span>
+        )}
       </div>
-
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={handleSave}
-        disabled={isLoading}
-      >
-        {isLoading ? "Saving..." : "Save"}
-      </Button>
     </div>
   );
 }

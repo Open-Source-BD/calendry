@@ -17,16 +17,15 @@ export default async function AvailabilityPage() {
   });
 
   return (
-    <div className="p-4 md:p-8 max-w-4xl mx-auto">
+    <div className="p-4 md:p-8 max-w-4xl mx-auto reveal-fade">
       <div className="mb-8">
         <h1 className="text-2xl font-normal text-[#1f1f1f]">Availability</h1>
-        <p className="text-sm text-[#5f6368]">Set your weekly recurring schedule.</p>
       </div>
 
-      <div className="google-card p-6">
+      <div className="google-card p-6 reveal-up">
         <div className="mb-6">
-          <h2 className="text-lg font-medium text-[#1f1f1f]">Weekly Hours</h2>
-          <p className="text-sm text-[#5f6368]">
+          <h2 className="text-base font-medium text-[#444746]">Weekly Hours</h2>
+          <p className="text-sm text-[#5f6368] mt-1">
             Configure the days and times you are available for bookings.
           </p>
         </div>
