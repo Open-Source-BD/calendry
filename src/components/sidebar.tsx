@@ -77,6 +77,7 @@ export function Sidebar() {
         <p className="text-xs text-[#5f6368] mt-2">1.8 GB of 15 GB used</p>
         <Button
           variant="outline"
+          onClick={() => handleUtilityClick("Storage plans")}
           className="mt-4 w-full rounded-full border-gray-300 text-[#1a73e8] hover:bg-[#eaf1fb] h-9"
         >
           Get more storage

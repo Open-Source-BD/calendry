@@ -13,10 +13,11 @@ const OfflineContext = createContext<OfflineContextType | undefined>(undefined);
 export function OfflineProvider({ children }: { children: React.ReactNode }) {
   const [isOfflineMode, setIsOfflineMode] = useState(false);
 
-  // Initialize from localStorage
+  // Initialize from localStorage safely (only on client)
   useEffect(() => {
     const saved = localStorage.getItem("offline-preview-mode");
     if (saved === "true") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsOfflineMode(true);
     }
   }, []);
