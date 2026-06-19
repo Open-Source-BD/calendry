@@ -36,13 +36,14 @@ export default async function DashboardPage({
     throw new Error("Could not connect to database. Please check your configuration.");
   }
 
+  let defaultUsername = "";
   if (!existingUser && user) {
     const email = user.emailAddresses[0]?.emailAddress;
     if (!email) {
         throw new Error("User email not found in Clerk profile.");
     }
-    
-    const defaultUsername = email.split("@")[0] + "_" + Date.now();
+
+    defaultUsername = email.split("@")[0] + "_" + Date.now();
     const fullName = [user.firstName, user.lastName].filter(Boolean).join(" ") || "Guest User";
 
     try {
